@@ -4,8 +4,6 @@ var points = 0;
 var lives = 5;
 function text_settings(){setFillColor(0,1,1); setTextAlign("center");};
 
-# kommentar
-
 function ask_name(){
 	setFillColor(0,0,0);
 	clear();
