@@ -54,9 +54,6 @@ function keydown(event){
 
 }
 
-
-
-
 #setEventHandler();
 
 # Main
