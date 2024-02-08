@@ -12,6 +12,8 @@ function ask_name(){
 	text(width()/2, height()/2, "Geben sie bitte ihren Nutzernamen ein \n Es wird die Nutzung im Vollbildmodus empfohlen");
 }
 
+# simple test
+
 function draw_topics(){
 	var topics = ["erste Programme", "Kontrollstrukturen", "Funktionen", "Container", "Datentypen", "Rekursion", "Debugging", "Anonyme Funktionen", "Algorithmische Denkweise", "Datenzentrierte Denkweise", "Formale Verifikation", "Laufzeitanalyse", "Sortieralgorithmen", "Repräsentation von Daten im Rechner", "Boole'sche Algebra", "Objektorientierte Programmierung", "LIFO und FIFO", "AVL-Bäume", "Hash-Tabellen", "Python"  ];
 	setFillColor(0,0,0);
