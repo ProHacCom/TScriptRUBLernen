@@ -1,0 +1,69 @@
+use namespace canvas;
+var uname;
+var points = 0;
+var lives = 5;
+function text_settings(){setFillColor(0,1,1); setTextAlign("center");};
+
+# kommentar
+
+function ask_name(){
+	setFillColor(0,0,0);
+	clear();
+	text_settings();
+	setFont("Helvetica", math.min(height(), width())/15);
+	text(width()/2, height()/2, "Geben sie bitte ihren Nutzernamen ein \n Es wird die Nutzung im Vollbildmodus empfohlen");
+}
+
+function draw_topics(){
+	var topics = ["erste Programme", "Kontrollstrukturen", "Funktionen", "Container", "Datentypen", "Rekursion", "Debugging", "Anonyme Funktionen", "Algorithmische Denkweise", "Datenzentrierte Denkweise", "Formale Verifikation", "Laufzeitanalyse", "Sortieralgorithmen", "Repräsentation von Daten im Rechner", "Boole'sche Algebra", "Objektorientierte Programmierung", "LIFO und FIFO", "AVL-Bäume", "Hash-Tabellen", "Python"  ];
+	setFillColor(0,0,0);
+	clear();
+	text_settings();
+	setFont("Helvetica", math.min(height(), width())/30);
+	for var i in 0:topics.size() do{
+		if i < 10 then{
+			text(width() / 4 , height() / 12 + i * height() / 11, topics[i]);
+		}
+		else {
+			text(width() / 4 * 3, height() / 12 +  (i - 10) * height() / 11, topics[i]);
+		}
+	}
+	setLineColor(0, 0.8, 0.8);
+	for var i in 1:10 do{
+		line(0, height() / 20 + i * height() / 11, width(), height() / 20 + i * height() / 11);
+	}
+	line(width()/2, 0, width()/2, height());
+}
+
+draw_topics();
+
+var tempname = "";
+function keydown(event){
+
+	# Quit
+	if event.key == "q" then quitEventMode();
+
+	# Username Input
+	if uname == null then{
+		if event.key.size() < 2 then{
+			tempname += event.key;
+		}
+		else if event.key == "Enter" and tempname.size() > 0 then {
+			uname = tempname;
+			draw_topics();
+		}
+	}
+
+}
+
+
+
+
+#setEventHandler();
+
+# Main
+ask_name();
+if uname != null then draw_topics();
+
+setEventHandler("canvas.keydown", keydown);
+enterEventMode();
