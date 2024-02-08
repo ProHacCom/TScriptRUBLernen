@@ -6,6 +6,20 @@ function text_settings(){setFillColor(0,1,1); setTextAlign("center");};
 var topics = ["erste Programme", "Kontrollstrukturen", "Funktionen", "Container", "Datentypen", "Rekursion", "Debugging", "Anonyme Funktionen", "Algorithmische Denkweise", "Datenzentrierte Denkweise", "Formale Verifikation", "Laufzeitanalyse", "Sortieralgorithmen", "Repräsentation von Daten im Rechner", "Boole'sche Algebra", "Objektorientierte Programmierung", "LIFO und FIFO", "AVL-Bäume", "Hash-Tabellen", "Python"];
 var now_topic;
 
+class Multiple_Choise {
+	private:
+		var question;
+		var answers;
+	public:
+		constructor(qes, ans){
+			question = qes;
+			if Type(ans) != Type([]) then error("Answer has to be an Array of Answers");
+			answers = ans;
+		}
+		function draw_answer(){
+
+		}
+}
 
 function ask_name(){
 	setFillColor(0,0,0);
@@ -35,8 +49,6 @@ function draw_topics(){
 	line(width()/2, 0, width()/2, height());
 }
 
-draw_topics();
-
 var tempname = "";
 function keydown(event){
 
@@ -63,9 +75,8 @@ function mousedown(event){
 		if event.x >= width() / 2 then{
 			temp_topic = 10;
 		}
-		var y_maus = event.y; #- height() / 12;
 		for var i in 0:11 do{
-			if y_maus < height() / 20 + i * height() / 11 then{
+			if event.y < height() / 20 + i * height() / 11 then{
 				temp_topic += i - 1;
 				now_topic = topics[temp_topic];
 				print(now_topic);
@@ -73,5 +84,15 @@ function mousedown(event){
 			}
 		}
 	}
-
 }
+
+
+#setEventHandler();
+
+# Main
+ask_name();
+if uname != null then draw_topics();
+
+setEventHandler("canvas.keydown", keydown);
+setEventHandler("canvas.mousedown", mousedown);
+enterEventMode();
