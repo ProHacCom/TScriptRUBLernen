@@ -3,6 +3,9 @@ var uname;
 var points = 0;
 var lives = 5;
 function text_settings(){setFillColor(0,1,1); setTextAlign("center");};
+var topics = ["erste Programme", "Kontrollstrukturen", "Funktionen", "Container", "Datentypen", "Rekursion", "Debugging", "Anonyme Funktionen", "Algorithmische Denkweise", "Datenzentrierte Denkweise", "Formale Verifikation", "Laufzeitanalyse", "Sortieralgorithmen", "Repräsentation von Daten im Rechner", "Boole'sche Algebra", "Objektorientierte Programmierung", "LIFO und FIFO", "AVL-Bäume", "Hash-Tabellen", "Python"];
+var now_topic;
+
 
 function ask_name(){
 	setFillColor(0,0,0);
@@ -12,10 +15,7 @@ function ask_name(){
 	text(width()/2, height()/2, "Geben sie bitte ihren Nutzernamen ein \n Es wird die Nutzung im Vollbildmodus empfohlen");
 }
 
-# simple test
-
 function draw_topics(){
-	var topics = ["erste Programme", "Kontrollstrukturen", "Funktionen", "Container", "Datentypen", "Rekursion", "Debugging", "Anonyme Funktionen", "Algorithmische Denkweise", "Datenzentrierte Denkweise", "Formale Verifikation", "Laufzeitanalyse", "Sortieralgorithmen", "Repräsentation von Daten im Rechner", "Boole'sche Algebra", "Objektorientierte Programmierung", "LIFO und FIFO", "AVL-Bäume", "Hash-Tabellen", "Python"  ];
 	setFillColor(0,0,0);
 	clear();
 	text_settings();
@@ -53,8 +53,29 @@ function keydown(event){
 			draw_topics();
 		}
 	}
-
 }
+
+function mousedown(event){
+
+	# select topic
+	var temp_topic = 0;
+	if now_topic == null and uname != null then{
+		if event.x >= width() / 2 then{
+			temp_topic = 10;
+			print(temp_topic);
+		}
+		var y_maus = event.y - height() / 12;
+		for var i in 0:11 do{
+			if y_maus < i * height() / 11 then{
+				temp_topic += i - 1;
+				now_topic = topics[temp_topic];
+				print(now_topic);
+				return;
+			}
+		}
+	}
+}
+
 
 #setEventHandler();
 
@@ -63,4 +84,5 @@ ask_name();
 if uname != null then draw_topics();
 
 setEventHandler("canvas.keydown", keydown);
+setEventHandler("canvas.mousedown", mousedown);
 enterEventMode();
