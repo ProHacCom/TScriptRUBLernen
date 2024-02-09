@@ -14,10 +14,10 @@ class Multiple_Choise {
 	public:
 		constructor(qes, ans){
 			question = qes;
-			if Type(ans) != Type([]) then error("Answer has to be an Array of Answers");
+			if Type(ans) != Type([]) then error("Answer has to be an Array of answers");
+			else if ans.size() > 5 then error("Max 5 answers");
 			answers = ans;
 		}
-
 		function draw_answer(){
 			setFillColor(0,0,0);
 			clear();
@@ -25,26 +25,29 @@ class Multiple_Choise {
 			setFont("Helvetica", math.min(height(), width())/20);
 			text(width()/2, 20, question);
 			setLineColor(0,1,1);
-			line(0, math.min(height(), width())/20 + width()/15,width(), math.min(height(), width())/20 + width()/15);
+			line(0, math.min(height(), width())/20 + width()/18,width(), math.min(height(), width())/20 + width()/18);
 			for var i in 0:answers.size() do{
 				setFillColor(math.random(),math.random(),math.random());
-				text(width()/2, (i + 1) * width()/10, answers[i]);
-				rect(width()/30,(i + 1) * width()/10, width()/20, width()/20);
+				text(width()/2, (i + 1) * width()/11, answers[i]);
+				rect(width()/30,(i + 1) * width()/11, width()/20, width()/20);
 			}
+
 		}
 		function qes_ans_getter(){
 			print(question);
 			print(answers);
 		}
+		function ans_getter(){
+			return answers;
+		}
 }
-
 
 function ask_name(){
 	setFillColor(0,0,0);
 	clear();
 	text_settings();
 	setFont("Helvetica", math.min(height(), width())/15);
-	text(width()/2, height()/2, "Geben sie bitte ihren Nutzernamen ein \n Es wird die Nutzung im Vollbildmodus empfohlen");
+	text(width()/2, height()/2, "Geben sie bitte Ihren Nutzernamen ein \n Die Nutzung wird im Vollbildmodus empfohlen!!");
 }
 
 function draw_topics(){
@@ -85,6 +88,17 @@ function keydown(event){
 	}
 }
 
+
+var q1 = Multiple_Choise("Frage\n zweite Zeile", ["Antwort 1\n zweite Zeile\n dritte", "Antwort 2",  "Antwort 3", "Antwort 4", "Antwort 5"]);
+#print(q1.qes_ans_getter());
+#q1.draw_answer();
+
+var mul_qes_bool = false;
+var mul_qes_now = q1;
+var mul_qes_true = [];
+
+
+
 function mousedown(event){
 
 	# select topic
@@ -102,6 +116,35 @@ function mousedown(event){
 			}
 		}
 	}
+
+	# multiple-choise boxen with mouse
+	if mul_qes_bool == true then{
+		if event.x > width()/30 and event.x < (width()/30 + width()/20) then {
+			for var i in 0:mul_qes_now.ans_getter().size() do{
+				if event.y > (i + 1) * width()/11 and event.y < (i + 1) * width()/11 +  width()/ 20 then{
+					setFillColor(math.random(),math.random(),math.random());
+					mul_qes_true.push(i);
+					fillRect(width()/30,(i + 1) * width()/11, width()/20, width()/20);
+					mul_qes_true.sort();
+					print(mul_qes_true);
+					if mul_qes_true.size() > 1 then{
+						for var j in 1:mul_qes_true.size() do{
+							print(mul_qes_true.size());
+							if mul_qes_true[j-1] == mul_qes_true[j] then{
+								setFillColor(0,0,0);
+								fillRect(width()/30,(mul_qes_true[j]+1) * width()/11, width()/20, width()/20);
+								mul_qes_true.remove(j-1);
+								mul_qes_true.remove(j-1);
+								break;
+							}
+						}
+					}
+					print(mul_qes_true);
+				}
+			}
+		}
+	}
+
 }
 
 
