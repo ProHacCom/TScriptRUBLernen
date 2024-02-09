@@ -6,6 +6,7 @@ function text_settings(){setFillColor(0,1,1); setTextAlign("center");};
 var topics = ["erste Programme", "Kontrollstrukturen", "Funktionen", "Container", "Datentypen", "Rekursion", "Debugging", "Anonyme Funktionen", "Algorithmische Denkweise", "Datenzentrierte Denkweise", "Formale Verifikation", "Laufzeitanalyse", "Sortieralgorithmen", "Repräsentation von Daten im Rechner", "Boole'sche Algebra", "Objektorientierte Programmierung", "LIFO und FIFO", "AVL-Bäume", "Hash-Tabellen", "Python"];
 var now_topic;
 
+
 class Multiple_Choise {
 	private:
 		var question;
@@ -16,10 +17,27 @@ class Multiple_Choise {
 			if Type(ans) != Type([]) then error("Answer has to be an Array of Answers");
 			answers = ans;
 		}
-		function draw_answer(){
 
+		function draw_answer(){
+			setFillColor(0,0,0);
+			clear();
+			text_settings();
+			setFont("Helvetica", math.min(height(), width())/20);
+			text(width()/2, 20, question);
+			setLineColor(0,1,1);
+			line(0, math.min(height(), width())/20 + width()/15,width(), math.min(height(), width())/20 + width()/15);
+			for var i in 0:answers.size() do{
+				setFillColor(math.random(),math.random(),math.random());
+				text(width()/2, (i + 1) * width()/10, answers[i]);
+				rect(width()/30,(i + 1) * width()/10, width()/20, width()/20);
+			}
+		}
+		function qes_ans_getter(){
+			print(question);
+			print(answers);
 		}
 }
+
 
 function ask_name(){
 	setFillColor(0,0,0);
@@ -90,8 +108,11 @@ function mousedown(event){
 #setEventHandler();
 
 # Main
+
 ask_name();
 if uname != null then draw_topics();
+
+
 
 setEventHandler("canvas.keydown", keydown);
 setEventHandler("canvas.mousedown", mousedown);
