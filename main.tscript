@@ -80,11 +80,19 @@ function keydown(event){
 	if uname == null then{
 		if event.key.size() < 2 then{
 			tempname += event.key;
+			ask_name();
+			text(width()/2, height()/3*2, tempname);
 		}
 		else if event.key == "Enter" and tempname.size() > 0 then {
 			uname = tempname;
 			draw_topics();
 		}
+		else if event.key == "Backspace" or event.key == "Delete" then{
+			tempname = tempname[0:tempname.size()-1];
+			ask_name();
+			text(width()/2, height()/3*2, tempname);
+		}
+		print(event.key);
 	}
 }
 
