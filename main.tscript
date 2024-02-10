@@ -11,8 +11,8 @@ class Multiple_Choise {
 	private:
 		var question;
 		var answers;
-		var correct_ans;
 	public:
+		var correct_ans;
 		constructor(qes, ans, c_ans ){
 			question = qes;
 			if Type(ans) != Type([]) then error("Answer has to be an Array of answers");
@@ -20,7 +20,7 @@ class Multiple_Choise {
 			answers = ans;
 			if Type(c_ans) != Type([]) then error("Correct Answers has to be an Array of Booleans");
 			else if c_ans.size() != ans.size() then error("Answers(Arraw of Strings).size() = Correct Answers(Arraw of Boolean).size()");
-
+			correct_ans = c_ans;
 		}
 		function draw_answer(){
 			setFillColor(0,0,0);
@@ -51,6 +51,7 @@ class Multiple_Choise {
 		}
 }
 
+
 function ask_name(){
 	setFillColor(0,0,0);
 	clear();
@@ -58,6 +59,7 @@ function ask_name(){
 	setFont("Helvetica", math.min(height(), width())/15);
 	text(width()/2, height()/2, "Geben sie bitte Ihren Nutzernamen ein \n Die Nutzung wird im Vollbildmodus empfohlen!!");
 }
+
 
 function draw_topics(){
 	setFillColor(0,0,0);
@@ -78,6 +80,7 @@ function draw_topics(){
 	}
 	line(width()/2, 0, width()/2, height());
 }
+
 
 var tempname = "";
 function keydown(event){
@@ -101,14 +104,13 @@ function keydown(event){
 			ask_name();
 			text(width()/2, height()/3*2, tempname);
 		}
-		#print(event.key);
 	}
 }
 
 
 var q1 = Multiple_Choise("Frage\n zweite Zeile",
 ["Antwort 1\n zweite Zeile\n dritte", "Antwort 2",  "Antwort 3", "Antwort 4", "Antwort 5"],
-[true, false, true, true, false]);
+[true, false, true, false, true]);
 #q1.draw_answer();
 
 var mul_qes_bool = true;
@@ -117,6 +119,7 @@ var mul_qes_true = [];
 
 
 function mousedown(event){
+
 
 	# select topic
 	var temp_topic = 0;
@@ -129,26 +132,22 @@ function mousedown(event){
 				temp_topic += i - 1;
 				now_topic = topics[temp_topic];
 				print(now_topic);
+
+
+				setFillColor(0,1,0);
+				if temp_topic < 10 then{
+					text(width() / 4 , height() / 12 + temp_topic * height() / 11, topics[temp_topic]);
+				}
+				else {
+					text(width() / 4 * 3, height() / 12 +  (temp_topic - 10) * height() / 11, topics[temp_topic]);
+				}
+				wait(750);
+				text_settings();
 				return;
 			}
 		}
-
-
-		setFillColor(0,1,0);
-		setLineColor(0,1,0);
-		setFont("Helvetica", math.min(height(), width())/30);
-		print(temp_topic);
-		if temp_topic < 10 then{
-			text(width() / 4 , height() / 12 + temp_topic * height() / 11, topics[temp_topic]);
-		}
-		else {
-			text(width() / 4 * 3, height() / 12 +  (temp_topic - 10) * height() / 11, topics[temp_topic]);
-		}
-		wait(1000000);
-		text_settings();
-
-
 	}
+
 
 	# multiple-choise boxen with mouse
 	if mul_qes_bool == true then{
@@ -176,24 +175,35 @@ function mousedown(event){
 			}
 		}
 
-		# check, if the answers are correct
+		# check, if the answers are correct -> wenn richtige Antwort mit
 		if event.x > width()/32*27 and event.x < width()/32*27 + width()/8 then{
 			if event.y > width()/50 and event.y < width()/50 + width()/20 then{
-			 print(true);
+				var true_false = []; # true -> wenn richtige Antwort
+				var temp_mul_qes_true = [false, false, false, false, false];
+				for var i in 0:mul_qes_true.size() do{
+					temp_mul_qes_true[mul_qes_true[i]] = true;
+				}
+				for var i in 0:temp_mul_qes_true.size() do{
+					if temp_mul_qes_true[i] == mul_qes_now.correct_ans[i] then true_false.push(true);
+					else true_false.push(false);
+					setLineWidth(width()/100);
+					if true_false[i] == true then setLineColor(0,1,0);
+					else setLineColor(1,0,0);
+					rect(width()/30,(i + 1) * width()/11, width()/20, width()/20);
+
+				}
+				#print(true_false);
 			}
 		}
 	}
-
+	#print(mul_qes_true);
 }
 
 
-#setEventHandler();
 
 # Main
-
 ask_name();
 if uname != null then draw_topics();
-
 
 
 setEventHandler("canvas.keydown", keydown);
