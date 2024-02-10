@@ -3,8 +3,14 @@ var uname;
 var points = 0;
 var lives = 5;
 function text_settings(){setFillColor(0,1,1); setTextAlign("center");};
-var topics = ["erste Programme", "Kontrollstrukturen", "Funktionen", "Container", "Datentypen", "Rekursion", "Debugging", "Anonyme Funktionen", "Algorithmische Denkweise", "Datenzentrierte Denkweise", "Formale Verifikation", "Laufzeitanalyse", "Sortieralgorithmen", "Repräsentation von Daten im Rechner", "Boole'sche Algebra", "Objektorientierte Programmierung", "LIFO und FIFO", "AVL-Bäume", "Hash-Tabellen", "Python"];
+var topics = ["erste Programme (Multiple-Choise-Fragen)", "Kontrollstrukturen (Multiple-Choise-Fragen)", "Funktionen (Multiple-Choise-Fragen)",
+"Container (Multiple-Choise-Fragen)", "Datentypen (Multiple-Choise-Fragen)", "Rekursion", "Debugging", "Anonyme Funktionen",
+"Algorithmische Denkweise", "Datenzentrierte Denkweise", "Formale Verifikation", "Laufzeitanalyse", "Sortieralgorithmen",
+"Repräsentation von Daten im Rechner", "Boole'sche Algebra", "Objektorientierte Programmierung", "LIFO und FIFO", "AVL-Bäume",
+"Hash-Tabellen", "Python"];
 var now_topic;
+var modus;
+var modus_name;
 
 
 class Multiple_Choise {
@@ -56,6 +62,36 @@ class Multiple_Choise {
 			return answers;
 		}
 }
+
+
+# muliple choise questions
+
+
+# topic question list
+var first_programs = [];
+var control_structures = [];
+var functions = [];
+var containers = [];
+var data_types = [];
+var recursion = [];
+var debugging = [];
+var anonymous_functions = [];
+var algorithmic_thinking = [];
+var data_centered_thinking = [];
+var formal_verification = [];
+var runtime_analysis = [];
+var sorting_algorithms = [];
+var representation_of_data_in_computer = [];
+var boolean_algebra =[];
+var object_oriented_programming = [];
+var lifo_and_fifo = [];
+var avl_trees = [];
+var hash_tables = [];
+var python3 = [];
+var sel_topic = [first_programs, control_structures, functions, containers, data_types, recursion, debugging, anonymous_functions,
+algorithmic_thinking, data_centered_thinking, formal_verification, runtime_analysis, sorting_algorithms,
+representation_of_data_in_computer, boolean_algebra, object_oriented_programming, lifo_and_fifo, avl_trees, hash_tables, python3];
+
 
 
 function ask_name(){
@@ -117,7 +153,7 @@ function keydown(event){
 var q1 = Multiple_Choise("Frage\n zweite Zeile",
 ["Antwort 1\n zweite Zeile\n dritte", "Antwort 2",  "Antwort 3", "Antwort 4", "Antwort 5"],
 [true, false, true, false, true]);
-q1.draw_answer();
+#q1.draw_answer();
 
 var mul_qes_bool = true;
 var mul_qes_now = q1;
@@ -136,9 +172,7 @@ function mousedown(event){
 			if event.y < height() / 20 + i * height() / 11 then{
 				temp_topic += i - 1;
 				now_topic = topics[temp_topic];
-				print(now_topic);
-
-
+				#print(now_topic);
 				setFillColor(0,1,0);
 				if temp_topic < 10 then{
 					text(width() / 4 , height() / 12 + temp_topic * height() / 11, topics[temp_topic]);
@@ -146,6 +180,11 @@ function mousedown(event){
 				else {
 					text(width() / 4 * 3, height() / 12 +  (temp_topic - 10) * height() / 11, topics[temp_topic]);
 				}
+				print("temp_topic:" + temp_topic);
+				modus = sel_topic[temp_topic];
+				modus_name = topics[temp_topic];
+				print("Modus:" + modus);
+				print("Modus Name:" + modus_name);
 				wait(750);
 				text_settings();
 				return;
