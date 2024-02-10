@@ -22,6 +22,8 @@ class Multiple_Choise {
 			else if c_ans.size() != ans.size() then error("Answers(Arraw of Strings).size() = Correct Answers(Arraw of Boolean).size()");
 			correct_ans = c_ans;
 		}
+
+
 		function draw_answer(){
 			setFillColor(0,0,0);
 			clear();
@@ -42,10 +44,14 @@ class Multiple_Choise {
 			text(width()/32*27,width()/50, "Abgabe");
 			text_settings();
 		}
+
+
 		function qes_ans_getter(){
 			print(question);
 			print(answers);
 		}
+
+
 		function ans_getter(){
 			return answers;
 		}
@@ -111,7 +117,7 @@ function keydown(event){
 var q1 = Multiple_Choise("Frage\n zweite Zeile",
 ["Antwort 1\n zweite Zeile\n dritte", "Antwort 2",  "Antwort 3", "Antwort 4", "Antwort 5"],
 [true, false, true, false, true]);
-#q1.draw_answer();
+q1.draw_answer();
 
 var mul_qes_bool = true;
 var mul_qes_now = q1;
@@ -119,7 +125,6 @@ var mul_qes_true = [];
 
 
 function mousedown(event){
-
 
 	# select topic
 	var temp_topic = 0;
@@ -187,16 +192,17 @@ function mousedown(event){
 					if temp_mul_qes_true[i] == mul_qes_now.correct_ans[i] then true_false.push(true);
 					else true_false.push(false);
 					setLineWidth(width()/100);
-					if true_false[i] == true then setLineColor(0,1,0);
+					if true_false[i] == true then {
+						setLineColor(0,1,0);
+						points +=1;
+						print(points);
+					}
 					else setLineColor(1,0,0);
 					rect(width()/30,(i + 1) * width()/11, width()/20, width()/20);
-
 				}
-				#print(true_false);
 			}
 		}
 	}
-	#print(mul_qes_true);
 }
 
 
