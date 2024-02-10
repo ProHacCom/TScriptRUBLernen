@@ -11,7 +11,7 @@ var topics = ["erste Programme", "Kontrollstrukturen", "Funktionen",
 var now_topic;
 var modus;
 var modus_name;
-
+setLineWidth(1);
 
 class Multiple_Choise {
 	private:
@@ -66,9 +66,12 @@ class Multiple_Choise {
 
 # muliple choise questions
 var q2 = Multiple_Choise("Frage", ["Ant 1", "Ant2", "Ant3", "Ant 4", "Ant 5"], [true, false, true, false, true]);
+var q3 = Multiple_Choise("Frage", ["Ant 6", "Ant2", "Ant3", "Ant 4", "Ant "], [true, false, true, false, true]);
+var q4 = Multiple_Choise("Frage", ["Ant 7", "Ant2", "Ant3", "Ant 4", "Ant 5"], [true, false, true, false, true]);
+var q5 = Multiple_Choise("Frage", ["Ant 8", "Ant2", "Ant3", "Ant 4", "Ant 5"], [true, false, true, false, true]);
 
 # topic question list
-var first_programs = [q2];
+var first_programs = [q2,q3,q4,q5];
 var control_structures = [];
 var functions = [];
 var containers = [];
@@ -174,9 +177,20 @@ var q1 = Multiple_Choise("Frage\n zweite Zeile",
 [true, false, true, false, true]);
 #q1.draw_answer();
 
+function rand_sel(){
+	if modus.size() == 0 then return;
+	var rand = Integer(math.round(math.random() * modus.size()) - 1);
+	if rand < 0 then rand = Integer(0);
+	if Type(modus[rand]) == Multiple_Choise then{
+		modus[rand].draw_answer();
+	}
+	return rand;
+}
+
 var mul_qes_bool = true;
 var mul_qes_now = q1;
 var mul_qes_true = [];
+var mul_qes_finished = false;
 
 
 function mousedown(event){
@@ -217,18 +231,14 @@ function mousedown(event){
 		#ect(width()/2- 1/2 * width()/12, height()/8*7, width()/10, height()/10);
 		if event.x > width()/2- 1/2 * width()/12 and event.x < width()/2 + 1/2 * width()/10 then{
 			if event.y > height()/8*7 and event.y < height()/8*7 + height()/10 then{
-				var rand = math.round(math.random() * modus.size()) - 1;
-				if rand < 0 then rand = 0;
-				if Type(modus[rand]) == Multiple_Choise then{
-					modus[rand].draw_answer();
-				}
+				rand_sel();
 			}
 		}
 	}
 
 
 	# multiple-choise boxen with mouse
-	if mul_qes_bool == true then{
+	if mul_qes_bool == true and mul_qes_finished == false then{
 
 		# activate and deactivate multiple-choise boxes with mous
 		if event.x > width()/30 and event.x < (width()/30 + width()/20) then {
@@ -253,7 +263,7 @@ function mousedown(event){
 			}
 		}
 
-		# check, if the answers are correct -> wenn richtige Antwort mit
+		# check, if the answers are correct
 		if event.x > width()/32*27 and event.x < width()/32*27 + width()/8 then{
 			if event.y > width()/50 and event.y < width()/50 + width()/20 then{
 				var true_false = []; # true -> wenn richtige Antwort
@@ -272,7 +282,25 @@ function mousedown(event){
 					}
 					else setLineColor(1,0,0);
 					rect(width()/30,(i + 1) * width()/11, width()/20, width()/20);
+					setFillColor(0,0,0);
+					setLineWidth(1);
+					frameRect(width()/32*27,width()/50, width()/8, width()/20);
+					setTextAlign("left");
+					setFont("Helvetica", math.min(height(), width())/19);
+					setFillColor(0,1,0);
+					text(width()/32*27,width()/50, "weiter");
+					text_settings();
+					mul_qes_finished = true;
 				}
+			}
+		}
+	}
+	else if mul_qes_bool == true and mul_qes_finished == true then{
+		if event.x > width()/32*27 and event.x < width()/32*27 + width()/8 then{
+			if event.y > width()/50 and event.y < width()/50 + width()/20 then{
+				rand_sel();
+				mul_qes_finished = false;
+				mul_qes_true = [];
 			}
 		}
 	}
