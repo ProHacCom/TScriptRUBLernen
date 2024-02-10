@@ -3,8 +3,8 @@ var uname;
 var points = 0;
 var lives = 5;
 function text_settings(){setFillColor(0,1,1); setTextAlign("center");};
-var topics = ["erste Programme (Multiple-Choise-Fragen)", "Kontrollstrukturen (Multiple-Choise-Fragen)", "Funktionen (Multiple-Choise-Fragen)",
-"Container (Multiple-Choise-Fragen)", "Datentypen (Multiple-Choise-Fragen)", "Rekursion", "Debugging", "Anonyme Funktionen",
+var topics = ["erste Programme", "Kontrollstrukturen", "Funktionen",
+"Container", "Datentypen", "Rekursion", "Debugging", "Anonyme Funktionen",
 "Algorithmische Denkweise", "Datenzentrierte Denkweise", "Formale Verifikation", "Laufzeitanalyse", "Sortieralgorithmen",
 "Repräsentation von Daten im Rechner", "Boole'sche Algebra", "Objektorientierte Programmierung", "LIFO und FIFO", "AVL-Bäume",
 "Hash-Tabellen", "Python"];
@@ -65,10 +65,10 @@ class Multiple_Choise {
 
 
 # muliple choise questions
-
+var q2 = Multiple_Choise("Frage", ["Ant 1", "Ant2", "Ant3", "Ant 4", "Ant 5"], [true, false, true, false, true]);
 
 # topic question list
-var first_programs = [];
+var first_programs = [q2];
 var control_structures = [];
 var functions = [];
 var containers = [];
@@ -121,6 +121,25 @@ function draw_topics(){
 		line(0, height() / 20 + i * height() / 11, width(), height() / 20 + i * height() / 11);
 	}
 	line(width()/2, 0, width()/2, height());
+}
+
+function move_to_topic(){
+	setFillColor(0,0,0);
+	clear();
+	text_settings();
+	setFont("Helvetica", math.min(height(), width())/30);
+	text(width()/2, 40, modus_name);
+	text(width()/2, 1 * width()/15 + 40, "Anzahl Fragen: " + modus.size());
+	var many_mq = 0;
+	for var i in 0:modus.size() do{
+		if Type(modus[i]) == Multiple_Choise then many_mq += 1;
+	}
+	text(width()/2, 2 * width()/15 + 40, "Anzahl multiple Choise Fragen: " + many_mq);
+	rect(width()/2- 1/2 * width()/12, height()/8*7, width()/10, height()/10);
+	setFillColor(0,1,0);
+	setTextAlign("left");
+	text(width()/2- 1/2 * width()/12, height()/8*7, "starten");
+	text_settings();
 }
 
 
@@ -183,11 +202,26 @@ function mousedown(event){
 				print("temp_topic:" + temp_topic);
 				modus = sel_topic[temp_topic];
 				modus_name = topics[temp_topic];
+				wait(750);
 				print("Modus:" + modus);
 				print("Modus Name:" + modus_name);
-				wait(750);
 				text_settings();
+				move_to_topic();
 				return;
+			}
+		}
+	}
+
+	# Check start-box in a topic
+	if modus != null then{
+		#ect(width()/2- 1/2 * width()/12, height()/8*7, width()/10, height()/10);
+		if event.x > width()/2- 1/2 * width()/12 and event.x < width()/2 + 1/2 * width()/10 then{
+			if event.y > height()/8*7 and event.y < height()/8*7 + height()/10 then{
+				var rand = math.round(math.random() * modus.size()) - 1;
+				if rand < 0 then rand = 0;
+				if Type(modus[rand]) == Multiple_Choise then{
+					modus[rand].draw_answer();
+				}
 			}
 		}
 	}
@@ -248,8 +282,7 @@ function mousedown(event){
 
 # Main
 ask_name();
-if uname != null then draw_topics();
-
+if uname != null and modus == null then draw_topics();
 
 setEventHandler("canvas.keydown", keydown);
 setEventHandler("canvas.mousedown", mousedown);
