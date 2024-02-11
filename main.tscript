@@ -208,7 +208,7 @@ function keydown(event){
 }
 
 
-var mul_qes_bool = true;
+var mul_qes_bool = false;
 var mul_qes_now = q1;
 var mul_qes_true = [];
 var mul_qes_finished = false;
@@ -222,6 +222,7 @@ function rand_sel(){
 	if Type(modus[rand]) == Multiple_Choise or Type(modus[rand]) == Sequence_Question then{
 		modus[rand].draw_answer();
 	}
+	if Type(modus[rand]) == Multiple_Choise then mul_qes_bool = true;
 	mul_qes_now = modus[rand];
 	return rand;
 }
@@ -272,7 +273,7 @@ function mousedown(event){
 	# multiple-choise boxen with mouse
 	if mul_qes_bool == true and mul_qes_finished == false then{
 
-		# activate and deactivate multiple-choise boxes with mous
+		# activate and deactivate multiple-choise boxes with mouse
 		if event.x > width()/30 and event.x < (width()/30 + width()/20) then {
 			for var i in 0:mul_qes_now.ans_getter().size() do{
 				if event.y > (i + 1) * width()/11 and event.y < (i + 1) * width()/11 +  width()/ 20 then{
@@ -331,13 +332,13 @@ function mousedown(event){
 		if event.x > width()/32*27 and event.x < width()/32*27 + width()/8 then{
 			if event.y > width()/50 and event.y < width()/50 + width()/20 then{
 				modus.remove(rand);
+				mul_qes_bool = false;
 				rand_sel();
 				mul_qes_finished = false;
 				mul_qes_true = [];
 			}
 		}
 	}
-	print(modus);
 }
 
 
