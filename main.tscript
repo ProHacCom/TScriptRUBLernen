@@ -13,42 +13,17 @@ var modus;
 var modus_name;
 setLineWidth(1);
 
-class Multiple_Choise {
-	private:
+class Question{
+	protected:
 		var question;
 		var answers;
 	public:
-		var correct_ans;
-		constructor(qes, ans, c_ans ){
+		constructor(qes, ans){
+			if Type(qes)!= String then error("Question hast to be an String");
 			question = qes;
 			if Type(ans) != Type([]) then error("Answer has to be an Array of answers");
 			else if ans.size() > 5 then error("Max 5 answers");
 			answers = ans;
-			if Type(c_ans) != Type([]) then error("Correct Answers has to be an Array of Booleans");
-			else if c_ans.size() != ans.size() then error("Answers(Arraw of Strings).size() = Correct Answers(Arraw of Boolean).size()");
-			correct_ans = c_ans;
-		}
-
-
-		function draw_answer(){
-			setFillColor(0,0,0);
-			clear();
-			text_settings();
-			setFont("Helvetica", math.min(height(), width())/20);
-			text(width()/2, 20, question);
-			setLineColor(0,1,1);
-			line(0, math.min(height(), width())/20 + width()/18,width(), math.min(height(), width())/20 + width()/18);
-			for var i in 0:answers.size() do{
-				setFillColor(math.random(),math.random(),math.random());
-				text(width()/2, (i + 1) * width()/11, answers[i]);
-				rect(width()/30,(i + 1) * width()/11, width()/20, width()/20);
-			}
-			rect(width()/32*27,width()/50, width()/8, width()/20);
-			setTextAlign("left");
-			setFont("Helvetica", math.min(height(), width())/19);
-			setFillColor(0,1,0);
-			text(width()/32*27,width()/50, "Abgabe");
-			text_settings();
 		}
 
 
@@ -61,6 +36,57 @@ class Multiple_Choise {
 		function ans_getter(){
 			return answers;
 		}
+
+		function draw(){
+			setFillColor(0,0,0);
+			clear();
+			text_settings();
+			setFont("Helvetica", math.min(height(), width())/20);
+			text(width()/2, 20, question);
+			setLineColor(0,1,1);
+			line(0, math.min(height(), width())/20 + width()/18,width(), math.min(height(), width())/20 + width()/18);
+			for var i in 0:answers.size() do{
+				setFillColor(math.random(),math.random(),math.random());
+				text(width()/2, (i + 1) * width()/11, answers[i]);
+			}
+			rect(width()/32*27,width()/50, width()/8, width()/20);
+			setTextAlign("left");
+			setFont("Helvetica", math.min(height(), width())/19);
+			setFillColor(0,1,0);
+			text(width()/32*27,width()/50, "Abgabe");
+			text_settings();
+		}
+}
+
+
+
+class Multiple_Choise : Question{
+	public:
+		var correct_ans;
+		constructor(qes, ans, c_ans) : super(qes, ans) {
+			if Type(c_ans) != Type([]) then error("Correct Answers has to be an Array of Booleans");
+			else if c_ans.size() != ans.size() then error("Answers(Arraw of Strings).size() = Correct Answers(Arraw of Boolean).size()");
+			correct_ans = c_ans;
+		}
+
+
+		function draw_answer(){
+			super.draw();
+			for var i in 0:super.answers.size() do{
+				rect(width()/30,(i + 1) * width()/11, width()/20, width()/20);
+			}
+		}
+}
+
+
+class Sequence_Question : Question {
+	public:
+		constructor(qes, ans):super(qes, ans){
+		}
+
+		function draw_answer(){
+			super.draw();
+		}
 }
 
 
@@ -72,10 +98,12 @@ var variablen = Multiple_Choise("Welche Aussagen über Variablen sind richtig?",
 var algo_entwicklung = Multiple_Choise("Wie entwickelt man Algorithmen für komplizierte Probleme?", ["zerlegen in einfache Probleme, \n welche wir bereits lösen können", "elementare Operationen so verknüpfen, dass \n komplizierte Probleme gelöst werden", "aufgeben", "in Stackoverflow nach informationen suchen", "Döner essen gehen"], [true, true, false, true, false]);
 var algo_korrekt = Multiple_Choise("Algorithmus heißt korrekt, wenn", ["wenn er nur terminiert(Berechnung in endlicher Zeit)", "wenn er nur für jede erlaubte Eingabe das in \n der Problemstellung geforderte Ergebnis produziert", "wenn er terminiert und für jede erlaubte Eingabe das in \n der Problemstellung geforderte Ergebnis produziert", "es ist egal, ob Algo. in endlicher Zeit beendet wird \n aber er muss größtenteils richtige Ergebnisse liefern", "wenn er größtenteils das richtige Ergebnis liefert"],[false, false, true, false, false]);
 var programmiersprachen = Multiple_Choise("Welche Aussagen über Programmiersprachen sind richtig?", ["setzten sich aus höher abstrahierten Operationen zusammen\n ->kleine Algorithmen in elementaren Operationen des Rechners programmiert", "es gibt Interpretationsspielraum", "Sprache in welcher Anweisungen exakt formuliert werden können \n (exakte Syntax, exakte Semantik)", "die Syntax ist die \" Rechtschreibregelung \" und \" Grammatik \" ", "die Semantik ist die Bedeutung jeder Anweisung"], [true, false, true, true, true]);
+var q1 = Sequence_Question("Ans", [1,2,3,4,5]);
+
 
 # topic question list
 var first_programs = [algorithmus, problem, darstellung_algo, variablen, algo_entwicklung, algo_korrekt, programmiersprachen];
-var control_structures = [];
+var control_structures = [q1];
 var functions = [];
 var containers = [];
 var data_types = [];
@@ -188,7 +216,7 @@ function rand_sel(){
 	if modus.size() == 0 then return;
 	rand = Integer(math.round(math.random() * modus.size()) - 1);
 	if rand < 0 then rand = Integer(0);
-	if Type(modus[rand]) == Multiple_Choise then{
+	if Type(modus[rand]) == Multiple_Choise or modus[rand]) == Sequence_Question then{
 		modus[rand].draw_answer();
 	}
 	mul_qes_now = modus[rand];
