@@ -388,8 +388,8 @@ function mousedown(event){
 }
 
 function mouseup(event){
-	#print(modus[rand]);
-	#if Type(modus[rand]) == Sequence_Question then{
+	print(mul_qes_now);
+	if Type(mul_qes_now) == Sequence_Question then{
 
 
 		# release a sequence element
@@ -406,11 +406,11 @@ function mouseup(event){
 							user_order[change_sel_pos] = seq_sel;
 						}
 					}
-					modus[rand].draw_answer();
+	  				modus[rand].draw_answer();
 					seq_sel = null;
 					seq_sel_pos = null;
 					change_sel = null;
-					change_sel_pos = null;
+	  				change_sel_pos = null;
 				}
 			}
 		}
@@ -434,7 +434,7 @@ function mouseup(event){
 				}
 			}
 		}
-	#}
+	}
 }
 
 # Main
