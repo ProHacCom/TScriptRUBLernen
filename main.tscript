@@ -81,7 +81,11 @@ class Multiple_Choise : Question{
 
 class Sequence_Question : Question {
 	public:
-		constructor(qes, ans):super(qes, ans){
+		var order_ans;
+		constructor(qes, ans, qes_ord):super(qes, ans){
+		if Type(qes_ord) != Array then error("Carrect Answer has to be an Array of Integern, which are important for the right order");
+		else if qes_ord.size() != super.answers.size() then error("Answer(Array of Strings).size() = Correct Order(Array of Integern).size()");
+		order_ans = qes_ord;
 		}
 
 		function draw_answer(){
@@ -98,9 +102,9 @@ var variablen = Multiple_Choise("Welche Aussagen über Variablen sind richtig?",
 var algo_entwicklung = Multiple_Choise("Wie entwickelt man Algorithmen für komplizierte Probleme?", ["zerlegen in einfache Probleme, \n welche wir bereits lösen können", "elementare Operationen so verknüpfen, dass \n komplizierte Probleme gelöst werden", "aufgeben", "in Stackoverflow nach informationen suchen", "Döner essen gehen"], [true, true, false, true, false]);
 var algo_korrekt = Multiple_Choise("Algorithmus heißt korrekt, wenn", ["wenn er nur terminiert(Berechnung in endlicher Zeit)", "wenn er nur für jede erlaubte Eingabe das in \n der Problemstellung geforderte Ergebnis produziert", "wenn er terminiert und für jede erlaubte Eingabe das in \n der Problemstellung geforderte Ergebnis produziert", "es ist egal, ob Algo. in endlicher Zeit beendet wird \n aber er muss größtenteils richtige Ergebnisse liefern", "wenn er größtenteils das richtige Ergebnis liefert"],[false, false, true, false, false]);
 var programmiersprachen = Multiple_Choise("Welche Aussagen über Programmiersprachen sind richtig?", ["setzten sich aus höher abstrahierten Operationen zusammen\n ->kleine Algorithmen in elementaren Operationen des Rechners programmiert", "es gibt Interpretationsspielraum", "Sprache in welcher Anweisungen exakt formuliert werden können \n (exakte Syntax, exakte Semantik)", "die Syntax ist die \" Rechtschreibregelung \" und \" Grammatik \" ", "die Semantik ist die Bedeutung jeder Anweisung"], [true, false, true, true, true]);
-var q1 = Sequence_Question("Ans", [1,2,3,4,5]);
-var q2 = Sequence_Question("Ans2", [1,2,3,4,5]);
-var q3 = Sequence_Question("Ans3", [1,2,3,4,5]);
+var q1 = Sequence_Question("Ans", [0,1,2,3,4], [0,1,2,3,4]);
+var q2 = Sequence_Question("Ans2", [0,1,2,4,3], [0,1,2,4,3]);
+var q3 = Sequence_Question("Ans3", [1,2,3,4,5], [4,2,3,1,0]);
 
 
 # topic question list
@@ -209,10 +213,13 @@ function keydown(event){
 
 
 var mul_qes_bool = false;
+var seq_qes_bool = false;
 var mul_qes_now = q1;
 var mul_qes_true = [];
 var mul_qes_finished = false;
 var rand;
+var seq_sel;
+var user_order = [];
 
 
 function rand_sel(){
@@ -223,6 +230,12 @@ function rand_sel(){
 		modus[rand].draw_answer();
 	}
 	if Type(modus[rand]) == Multiple_Choise then mul_qes_bool = true;
+	else if Type(modus[rand]) == Sequence_Question then {
+		seq_qes_bool = true;
+		for var i in 0:modus[rand].order_ans.size() do{
+			user_order.push(i);
+		}
+	}
 	mul_qes_now = modus[rand];
 	return rand;
 }
@@ -339,9 +352,41 @@ function mousedown(event){
 			}
 		}
 	}
+
+
+	# choose a sequence element
+	if seq_qes_bool == true then{
+		for var i in 0:mul_qes_now.ans_getter().size() do{
+			if event.y > (i + 1) * width()/11 and event.y < (i + 1) * width()/11 +  width()/ 20 then{
+				print(mul_qes_now);
+				seq_sel = i;
+				print("Beginn: " + seq_sel);
+			}
+		}
+	}
 }
 
+function mouseup(event){
 
+	# release a sequence element
+	if seq_qes_bool == true then{
+		var change_sel;
+		for var i in 0:mul_qes_now.ans_getter().size() do{
+			if event.y > (i + 1) * width()/11 and event.y < (i + 1) * width()/11 +  width()/ 20 then{
+				change_sel = i;
+				print("Ende: " + change_sel);
+				print("Oder vorher: " + user_order);
+				user_order[seq_sel] = change_sel;
+				user_order[change_sel] = seq_sel;
+				print("Oder: " + user_order);
+				change_sel = null;
+				seq_sel = null;
+			}
+		}
+	}
+
+
+}
 
 # Main
 ask_name();
@@ -349,4 +394,5 @@ if uname != null and modus == null then draw_topics();
 
 setEventHandler("canvas.keydown", keydown);
 setEventHandler("canvas.mousedown", mousedown);
+setEventHandler("canvas.mouseup", mouseup);
 enterEventMode();
