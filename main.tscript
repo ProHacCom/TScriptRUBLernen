@@ -386,15 +386,12 @@ function mouseup(event){
 			if event.y > (i + 1) * width()/11 and event.y < (i + 1) * width()/11 +  width()/ 20 then{
 				change_sel = user_order[i];
 				change_sel_pos = i;
-				print("Ende: " + change_sel);
-				print("Oder vorher: " + user_order);
 				if seq_sel != null and seq_sel_pos != null and change_sel != null and change_sel_pos != null then{
 					if change_sel != seq_sel and seq_sel_pos != change_sel_pos then{
 						user_order[seq_sel_pos] = change_sel;
 						user_order[change_sel_pos] = seq_sel;
 					}
 				}
-				print("Oder: " + user_order);
 				modus[rand].draw_answer();
 				seq_sel = null;
 				seq_sel_pos = null;
@@ -403,6 +400,24 @@ function mouseup(event){
 			}
 		}
 	}
+	# check, if the answers are correct
+	if event.x > width()/32*27 and event.x < width()/32*27 + width()/8 then{
+		if event.y > width()/50 and event.y < width()/50 + width()/20 then{
+			for var i in 0:modus[rand].ans_getter().size() do{
+				print("modus[rand].ans_getter()[order_ans[i]]" + modus[rand].ans_getter()[modus[rand].order_ans[i]]);
+				print("user_order[i]" + user_order[i]);
+				if modus[rand].ans_getter()[modus[rand].order_ans[i]] == user_order[i] then{
+					setFillColor(0,1,0);
+				}
+				else{
+					setFillColor(1,0,0);
+				}
+				text(width()/2, (i + 1) * width()/11, user_order[i]);
+				text_settings();
+			}
+		}
+	}
+
 
 
 }
