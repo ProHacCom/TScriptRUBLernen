@@ -12,6 +12,7 @@ var now_topic;
 var modus;
 var modus_name;
 setLineWidth(1);
+var user_order = [];
 
 class Question{
 	protected:
@@ -26,13 +27,6 @@ class Question{
 			answers = ans;
 		}
 
-
-		function qes_ans_getter(){
-			print(question);
-			print(answers);
-		}
-
-
 		function ans_getter(){
 			return answers;
 		}
@@ -45,10 +39,6 @@ class Question{
 			text(width()/2, 20, question);
 			setLineColor(0,1,1);
 			line(0, math.min(height(), width())/20 + width()/18,width(), math.min(height(), width())/20 + width()/18);
-			for var i in 0:answers.size() do{
-				setFillColor(math.random(),math.random(),math.random());
-				text(width()/2, (i + 1) * width()/11, answers[i]);
-			}
 			rect(width()/32*27,width()/50, width()/8, width()/20);
 			setTextAlign("left");
 			setFont("Helvetica", math.min(height(), width())/19);
@@ -72,6 +62,11 @@ class Multiple_Choise : Question{
 
 		function draw_answer(){
 			super.draw();
+			for var i in 0:answers.size() do{
+				setFillColor(math.random(),math.random(),math.random());
+				text(width()/2, (i + 1) * width()/11, answers[i]);
+			}
+
 			for var i in 0:super.answers.size() do{
 				rect(width()/30,(i + 1) * width()/11, width()/20, width()/20);
 			}
@@ -85,11 +80,23 @@ class Sequence_Question : Question {
 		constructor(qes, ans, qes_ord):super(qes, ans){
 		if Type(qes_ord) != Array then error("Carrect Answer has to be an Array of Integern, which are important for the right order");
 		else if qes_ord.size() != super.answers.size() then error("Answer(Array of Strings).size() = Correct Order(Array of Integern).size()");
-		order_ans = qes_ord; 
+		order_ans = qes_ord;
 		}
 
 		function draw_answer(){
 			super.draw();
+			if user_order == [] then{
+				for var i in 0:answers.size() do{
+					setFillColor(math.random(),math.random(),math.random());
+					text(width()/2, (i + 1) * width()/11, answers[i]);
+				}
+			}
+			else{
+				for var i in 0:answers.size() do{
+					setFillColor(math.random(),math.random(),math.random());
+					text(width()/2, (i + 1) * width()/11, user_order[i]);
+				}
+			}
 		}
 }
 
@@ -102,9 +109,9 @@ var variablen = Multiple_Choise("Welche Aussagen über Variablen sind richtig?",
 var algo_entwicklung = Multiple_Choise("Wie entwickelt man Algorithmen für komplizierte Probleme?", ["zerlegen in einfache Probleme, \n welche wir bereits lösen können", "elementare Operationen so verknüpfen, dass \n komplizierte Probleme gelöst werden", "aufgeben", "in Stackoverflow nach informationen suchen", "Döner essen gehen"], [true, true, false, true, false]);
 var algo_korrekt = Multiple_Choise("Algorithmus heißt korrekt, wenn", ["wenn er nur terminiert(Berechnung in endlicher Zeit)", "wenn er nur für jede erlaubte Eingabe das in \n der Problemstellung geforderte Ergebnis produziert", "wenn er terminiert und für jede erlaubte Eingabe das in \n der Problemstellung geforderte Ergebnis produziert", "es ist egal, ob Algo. in endlicher Zeit beendet wird \n aber er muss größtenteils richtige Ergebnisse liefern", "wenn er größtenteils das richtige Ergebnis liefert"],[false, false, true, false, false]);
 var programmiersprachen = Multiple_Choise("Welche Aussagen über Programmiersprachen sind richtig?", ["setzten sich aus höher abstrahierten Operationen zusammen\n ->kleine Algorithmen in elementaren Operationen des Rechners programmiert", "es gibt Interpretationsspielraum", "Sprache in welcher Anweisungen exakt formuliert werden können \n (exakte Syntax, exakte Semantik)", "die Syntax ist die \" Rechtschreibregelung \" und \" Grammatik \" ", "die Semantik ist die Bedeutung jeder Anweisung"], [true, false, true, true, true]);
-var q1 = Sequence_Question("Ans", [0,1,2,3,4], [0,1,2,3,4]);
-var q2 = Sequence_Question("Ans2", [0,1,2,4,3], [0,1,2,4,3]);
-var q3 = Sequence_Question("Ans3", [1,2,3,4,5], [4,2,3,1,0]);
+var q1 = Sequence_Question("Ans", ["0st","1a","2d","s3","s4"], [0,1,2,3,4]);
+var q2 = Sequence_Question("Ans2", ["0st","1f","s2","4f","d3dd"], [0,1,2,4,3]);
+var q3 = Sequence_Question("Ans3", ["1st","2d","32d","4d","5d"], [4,2,3,1,0]);
 
 
 # topic question list
@@ -218,11 +225,10 @@ var mul_qes_now = q1;
 var mul_qes_true = [];
 var mul_qes_finished = false;
 var rand;
-var seq_sel; 
-var user_order = [];
+var seq_sel;
 var seq_sel_pos;
 
-
+# chooses a question random of the topic
 function rand_sel(){
 	if modus.size() == 0 then return;
 	rand = Integer(math.round(math.random() * modus.size()) - 1);
@@ -233,8 +239,10 @@ function rand_sel(){
 	if Type(modus[rand]) == Multiple_Choise then mul_qes_bool = true;
 	else if Type(modus[rand]) == Sequence_Question then {
 		seq_qes_bool = true;
-		for var i in 0:modus[rand].order_ans.size() do{
-			user_order.push(i);	
+		if user_order == [] then{
+			for var i in 0:modus[rand].order_ans.size() do{
+				user_order.push(modus[rand].ans_getter()[i]);
+			}
 		}
 	}
 	mul_qes_now = modus[rand];
@@ -353,8 +361,8 @@ function mousedown(event){
 			}
 		}
 	}
-	
-	
+
+
 	# choose a sequence element
 	if seq_qes_bool == true then{
 		for var i in 0:mul_qes_now.ans_getter().size() do{
@@ -369,7 +377,7 @@ function mousedown(event){
 }
 
 function mouseup(event){
-	
+
 	# release a sequence element
 	if seq_qes_bool == true then{
 		var change_sel;
@@ -380,14 +388,23 @@ function mouseup(event){
 				change_sel_pos = i;
 				print("Ende: " + change_sel);
 				print("Oder vorher: " + user_order);
-				user_order[seq_sel_pos] = change_sel;
-				user_order[change_sel_pos] = seq_sel;
+				if seq_sel != null and seq_sel_pos != null and change_sel != null and change_sel_pos != null then{
+					if change_sel != seq_sel and seq_sel_pos != change_sel_pos then{
+						user_order[seq_sel_pos] = change_sel;
+						user_order[change_sel_pos] = seq_sel;
+					}
+				}
 				print("Oder: " + user_order);
+				modus[rand].draw_answer();
+				seq_sel = null;
+				seq_sel_pos = null;
+				change_sel = null;
+				change_sel_pos = null;
 			}
 		}
-	}	
-	
-	
+	}
+
+
 }
 
 # Main
