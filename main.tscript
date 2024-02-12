@@ -85,7 +85,7 @@ class Sequence_Question : Question {
 		constructor(qes, ans, qes_ord):super(qes, ans){
 		if Type(qes_ord) != Array then error("Carrect Answer has to be an Array of Integern, which are important for the right order");
 		else if qes_ord.size() != super.answers.size() then error("Answer(Array of Strings).size() = Correct Order(Array of Integern).size()");
-		order_ans = qes_ord;
+		order_ans = qes_ord; 
 		}
 
 		function draw_answer(){
@@ -218,8 +218,9 @@ var mul_qes_now = q1;
 var mul_qes_true = [];
 var mul_qes_finished = false;
 var rand;
-var seq_sel;
+var seq_sel; 
 var user_order = [];
+var seq_sel_pos;
 
 
 function rand_sel(){
@@ -233,7 +234,7 @@ function rand_sel(){
 	else if Type(modus[rand]) == Sequence_Question then {
 		seq_qes_bool = true;
 		for var i in 0:modus[rand].order_ans.size() do{
-			user_order.push(i);
+			user_order.push(i);	
 		}
 	}
 	mul_qes_now = modus[rand];
@@ -352,14 +353,15 @@ function mousedown(event){
 			}
 		}
 	}
-
-
+	
+	
 	# choose a sequence element
 	if seq_qes_bool == true then{
 		for var i in 0:mul_qes_now.ans_getter().size() do{
 			if event.y > (i + 1) * width()/11 and event.y < (i + 1) * width()/11 +  width()/ 20 then{
 				print(mul_qes_now);
-				seq_sel = i;
+				seq_sel = user_order[i];
+				seq_sel_pos = i;
 				print("Beginn: " + seq_sel);
 			}
 		}
@@ -367,25 +369,25 @@ function mousedown(event){
 }
 
 function mouseup(event){
-
+	
 	# release a sequence element
 	if seq_qes_bool == true then{
 		var change_sel;
+		var change_sel_pos;
 		for var i in 0:mul_qes_now.ans_getter().size() do{
 			if event.y > (i + 1) * width()/11 and event.y < (i + 1) * width()/11 +  width()/ 20 then{
-				change_sel = i;
+				change_sel = user_order[i];
+				change_sel_pos = i;
 				print("Ende: " + change_sel);
 				print("Oder vorher: " + user_order);
-				user_order[seq_sel] = change_sel;
-				user_order[change_sel] = seq_sel;
+				user_order[seq_sel_pos] = change_sel;
+				user_order[change_sel_pos] = seq_sel;
 				print("Oder: " + user_order);
-				change_sel = null;
-				seq_sel = null;
 			}
 		}
-	}
-
-
+	}	
+	
+	
 }
 
 # Main
