@@ -232,29 +232,35 @@ var seq_sel_pos;
 
 # chooses a question random of the topic
 function rand_sel(){
-	if modus.size() == 0 then return;
-	rand = Integer(math.round(math.random() * modus.size()) - 1);
-	if rand < 0 then rand = Integer(0);
-	if Type(modus[rand]) == Multiple_Choise or Type(modus[rand]) == Sequence_Question then{
-		modus[rand].draw_answer();
+	if modus.size() == 0 then {
+		now_topic = null;
+		draw_topics();
+		return;
 	}
-	if Type(modus[rand]) == Multiple_Choise then mul_qes_bool = true;
-	else if Type(modus[rand]) == Sequence_Question then {
-		seq_qes_bool = true;
-		if user_order == [] then{
-			for var i in 0:modus[rand].order_ans.size() do{
-				user_order.push(modus[rand].ans_getter()[i]);
+	else{
+		rand = Integer(math.round(math.random() * modus.size()) - 1);
+		if rand < 0 then rand = Integer(0);
+
+		if Type(modus[rand]) == Multiple_Choise or Type(modus[rand]) == Sequence_Question then{
+			modus[rand].draw_answer();
+		}
+		if Type(modus[rand]) == Multiple_Choise then mul_qes_bool = true;
+		else if Type(modus[rand]) == Sequence_Question then {
+			seq_qes_bool = true;
+			if user_order == [] then{
+				for var i in 0:modus[rand].order_ans.size() do{
+					user_order.push(modus[rand].ans_getter()[i]);
+				}
 			}
 		}
+		mul_qes_now = modus[rand];
+		return rand;
 	}
-	mul_qes_now = modus[rand];
-	return rand;
 }
 
 
 # weiter-button
 function weiter(i){
-		rect(width()/30,(i + 1) * width()/11, width()/20, width()/20);
 		setFillColor(0,0,0);
 		setLineWidth(1);
 		frameRect(width()/32*27,width()/50, width()/8, width()/20);
@@ -355,6 +361,7 @@ function mousedown(event){
 						print(points);
 					}
 					else setLineColor(1,0,0);
+					rect(width()/30,(i + 1) * width()/11, width()/20, width()/20);
 					weiter(i);
 					mul_qes_finished = true;
 				}
