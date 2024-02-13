@@ -228,6 +228,7 @@ var mul_qes_finished = false;
 var rand;
 var seq_sel;
 var seq_sel_pos;
+var seq_qes_finished = false;
 
 
 # chooses a question random of the topic
@@ -424,22 +425,30 @@ function mouseup(event){
 
 
 		# check, if the answers are correct
-		if event.x > width()/32*27 and event.x < width()/32*27 + width()/8 then{
-			if event.y > width()/50 and event.y < width()/50 + width()/20 then{
-				for var i in 0:modus[rand].ans_getter().size() do{
-					print("modus[rand].ans_getter()[order_ans[i]]" + modus[rand].ans_getter()[modus[rand].order_ans[i]]);
-					print("user_order[i]" + user_order[i]);
-					if modus[rand].ans_getter()[modus[rand].order_ans[i]] == user_order[i] then{
-						setFillColor(0,1,0);
+		if seq_qes_finished == false then{
+			if event.x > width()/32*27 and event.x < width()/32*27 + width()/8 then{
+				if event.y > width()/50 and event.y < width()/50 + width()/20 then{
+					for var i in 0:modus[rand].ans_getter().size() do{
+						if modus[rand].ans_getter()[modus[rand].order_ans[i]] == user_order[i] then{
+							setFillColor(0,1,0);
+						}
+						else{
+							setFillColor(1,0,0);
+						}
+						text(width()/2, (i + 1) * width()/11, user_order[i]);
+						text_settings();
+						weiter(i);
+						seq_qes_finished = true;
 					}
-					else{
-						setFillColor(1,0,0);
-					}
-					text(width()/2, (i + 1) * width()/11, user_order[i]);
-					text_settings();
-					weiter(i);
 				}
 			}
+		}
+		else if seq_qes_finished == true then{
+			if seq_qes_bool == true then modus.remove(rand);
+			seq_qes_bool = false;
+			user_order = [];
+			rand_sel();
+			seq_qes_finished = false;
 		}
 	}
 }
